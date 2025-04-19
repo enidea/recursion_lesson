@@ -19,8 +19,11 @@ function insertAtPosition(
   while (cur !== null) {
     if (index === position) {
       const next = cur.next;
-      const nodeToBeInserted: SinglyLinkedListNode<number> = { data, next };
+      const nodeToBeInserted = new SinglyLinkedListNode(data);
+      nodeToBeInserted.next = next;
       cur.next = nodeToBeInserted;
+
+      break;
     }
 
     index++;
