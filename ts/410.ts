@@ -33,7 +33,11 @@ function findMergeNode(
   let result = -1;
   let index = 0;
 
-  while (aList[index] === bList[index]) {
+  while (
+    index < aList.length &&
+    index < bList.length &&
+    aList[index] === bList[index]
+  ) {
     result = aList[index];
     index++;
   }
