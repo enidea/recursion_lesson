@@ -11,20 +11,17 @@ class SinglyLinkedListNode<E> {
 function deleteTail(
   head: SinglyLinkedListNode<number>,
 ): SinglyLinkedListNode<number> | null {
-  const first = head;
-  let pre = first;
-  let cur = pre.next;
+  let cur = head;
 
-  if (cur === null) {
+  if (cur.next === null) {
     return null;
   }
 
-  while (cur?.next !== null) {
-    pre = cur;
+  while (cur.next && cur.next.next !== null) {
     cur = cur.next;
   }
 
-  pre.next = null;
+  cur.next = null;
 
-  return first;
+  return head;
 }
