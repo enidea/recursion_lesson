@@ -12,28 +12,21 @@ function insertNodeInSorted(
   head: SinglyLinkedListNode<number>,
   data: number,
 ): SinglyLinkedListNode<number> {
-  let cur: SinglyLinkedListNode<number> | null = head;
   const newNode = new SinglyLinkedListNode(data);
 
-  if (cur.data >= data) {
-    newNode.next = cur;
+  if (head.data >= data) {
+    newNode.next = head;
     return newNode;
   }
 
-  while (cur !== null) {
-    if (cur.next === null) {
-      cur.next = newNode;
-      return head;
-    }
+  let cur = head;
 
-    if (cur.next.data >= data) {
-      newNode.next = cur.next;
-      cur.next = newNode;
-      return head;
-    }
-
+  while (cur.next !== null && cur.next.data < data) {
     cur = cur.next;
   }
 
-  throw new Error('Unreachable');
+  newNode.next = cur.next;
+  cur.next = newNode;
+
+  return head;
 }
