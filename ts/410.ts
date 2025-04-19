@@ -24,38 +24,30 @@ function findMergeNode(
   headA: SinglyLinkedListNode<number>,
   headB: SinglyLinkedListNode<number>,
 ): number {
-  const aLength = getLength(headA);
-  const bLength = getLength(headB);
+  let aLength = getLength(headA);
+  let bLength = getLength(headB);
 
-  let aCurrent = headA;
-  let bCurrent = headB;
+  let aCurrent: SinglyLinkedListNode<number> | null = headA;
+  let bCurrent: SinglyLinkedListNode<number> | null = headB;
 
-  if (aLength > bLength) {
-    for (let index = 0; index < aLength - bLength; index++) {
-      if (aCurrent.next === null) {
-        throw new Error('Invalid list');
-      }
-
-      aCurrent = aCurrent.next;
-    }
+  while (aLength > bLength) {
+    // biome-ignore lint/style/noNonNullAssertion: <explanation>
+    aCurrent = aCurrent.next!;
+    aLength--;
   }
 
-  if (aLength < bLength) {
-    for (let index = 0; index < bLength - aLength; index++) {
-      if (bCurrent.next === null) {
-        throw new Error('Invalid list');
-      }
-
-      bCurrent = bCurrent.next;
-    }
+  while (aLength < bLength) {
+    // biome-ignore lint/style/noNonNullAssertion: <explanation>
+    bCurrent = bCurrent.next!;
+    bLength--;
   }
 
   let result = -1;
 
-  while (aCurrent.next !== null && bCurrent.next !== null) {
-    if (aCurrent.next.data === bCurrent.next.data) {
+  while (aCurrent !== null && bCurrent !== null) {
+    if (aCurrent.data === bCurrent.data) {
       if (result === -1) {
-        result = aCurrent.next.data;
+        result = aCurrent.data;
       }
     } else {
       result = -1;
