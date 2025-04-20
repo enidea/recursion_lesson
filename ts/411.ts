@@ -16,6 +16,16 @@ class SinglyLinkedListNode<E> {
 
     return clone;
   }
+
+  public getTail() {
+    let current: SinglyLinkedListNode<E> = this;
+
+    while (current.next) {
+      current = current.next;
+    }
+
+    return current;
+  }
 }
 
 function reproduceByN(
@@ -23,27 +33,16 @@ function reproduceByN(
   n: number,
 ): SinglyLinkedListNode<number> {
   if (n <= 0) {
-    throw new Error('n must be natural number.');
+    throw new Error('n must be a positive integer.');
   }
 
-  if (n === 1) {
-    return head;
-  }
+  const baseHead = head.clone();
 
-  const clonedHead = head.clone();
-
-  let current = head;
-
-  while (current.next !== null) {
-    current = current.next;
-  }
+  let tail = head.getTail();
 
   for (let index = 0; index < n - 1; index++) {
-    current.next = clonedHead.clone();
-
-    while (current.next !== null) {
-      current = current.next;
-    }
+    tail.next = baseHead.clone();
+    tail = tail.getTail();
   }
 
   return head;
