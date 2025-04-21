@@ -1,16 +1,16 @@
-const calcResult = (diceRolls: number[]) => {
-  const GAIN = 4;
+const GAIN_PER_ROLL = 4;
 
+const calcResult = (diceRolls: number[]) => {
   let result = 0;
   let rolls: number[] = [];
 
   for (let index = 0; index < diceRolls.length; index++) {
-    if ((diceRolls[index - 1] ?? 0) > diceRolls[index]) {
+    if (index > 0 && diceRolls[index - 1] > diceRolls[index]) {
       result = 0;
       rolls = [];
     }
 
-    result += GAIN;
+    result += GAIN_PER_ROLL;
     rolls.push(diceRolls[index]);
   }
 
@@ -54,5 +54,5 @@ function diceStreakGamble(
     throw new Error('No winner');
   }
 
-  return `Winner: Player ${winner.name[winner.name.length - 1]} won $${winner.result} by rolling [${winner.rolls}]`;
+  return `Winner: Player ${winner.name.replace('player', '')} won $${winner.result} by rolling [${winner.rolls}]`;
 }
