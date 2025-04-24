@@ -1,6 +1,7 @@
 type ParenthesisStart = '(' | '{' | '[';
+const parenthesisStartList = ['(', '{', '['] satisfies ParenthesisStart[];
 type ParenthesisEnd = ')' | '}' | ']';
-type Parenthesis = ParenthesisStart | ParenthesisEnd;
+const parenthesisEndList = [')', '}', ']'] satisfies ParenthesisEnd[];
 const getParenthesisStart = (start: ParenthesisEnd) => {
   const map: Record<ParenthesisEnd, ParenthesisStart> = {
     ')': '(',
@@ -12,11 +13,16 @@ const getParenthesisStart = (start: ParenthesisEnd) => {
 };
 
 function isParenthesesValid(parentheses: string): boolean {
-  const stack: Parenthesis[] = [];
+  const stack: ParenthesisStart[] = [];
 
   for (const parenthesis of parentheses) {
+    if (parenthesisStartList.includes(parenthesis as ParenthesisStart)) {
+      stack.push(parenthesis as ParenthesisStart);
+    }
+
     if (
       stack.length > 0 &&
+      parenthesisEndList.includes(parenthesis as ParenthesisEnd) &&
       stack[stack.length - 1] ===
         getParenthesisStart(parenthesis as ParenthesisEnd)
     ) {
@@ -25,7 +31,9 @@ function isParenthesesValid(parentheses: string): boolean {
       continue;
     }
 
-    stack.push(parenthesis as Parenthesis);
+    if (parenthesisEndList.includes(parenthesis as ParenthesisEnd)) {
+      return false;
+    }
   }
 
   return stack.length === 0;
