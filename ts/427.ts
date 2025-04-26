@@ -1,41 +1,20 @@
 function stockSpan(stocks: number[]): number[] {
-  if (stocks.length === 0) {
-    throw new Error('invalid inputs');
-  }
+  const stack: number[] = [];
+  const spans: number[] = [];
 
-  const results = [1];
-  let min = stocks[0];
-  let max = stocks[0];
-
-  for (let index = 1; index < stocks.length; index++) {
-    const preStock = stocks[index - 1];
-    const stock = stocks[index];
-
-    if (stock < min) {
-      min = stock;
-      results.push(1);
-    } else if (stock > max) {
-      max = stock;
-      results.push(index + 1);
-    } else if (preStock === stock) {
-      results.push(results[results.length - 1]);
-    } else {
-      let result = 1;
-      let current = index;
-
-      while (current > 0) {
-        current--;
-
-        if (stock <= stocks[current]) {
-          break;
-        }
-
-        result++;
-      }
-
-      results.push(result);
+  stocks.forEach((stock, index) => {
+    while (stack.length > 0 && stock > stocks[stack[stack.length - 1]]) {
+      stack.pop();
     }
-  }
 
-  return results;
+    if (stack.length === 0) {
+      spans.push(index + 1);
+    } else {
+      spans.push(index - stack[stack.length - 1]);
+    }
+
+    stack.push(index);
+  });
+
+  return spans;
 }
