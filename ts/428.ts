@@ -3,11 +3,11 @@ function minWindowArrK(intArr: number[], k: number): number[] {
   const deque: number[] = [];
 
   for (let i = 0; i < intArr.length; i++) {
-    if (deque.length && deque[0] <= i - k) {
+    if (deque.length > 0 && deque[0] <= i - k) {
       deque.shift();
     }
 
-    while (deque.length && intArr[deque[deque.length - 1]] > intArr[i]) {
+    while (deque.length > 0 && intArr[deque[deque.length - 1]] > intArr[i]) {
       deque.pop();
     }
 
