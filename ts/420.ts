@@ -1,27 +1,47 @@
-function largestRectangle(h: number[]): number {
+function largestRectangle(heights: number[]): number {
+  const lefts = new Array<number>(heights.length);
+  const stackForLeft = new Array<number>();
+
+  for (let index = 0; index < heights.length; index++) {
+    const height = heights[index];
+    let left = 1;
+
+    while (
+      stackForLeft.length > 0 &&
+      height <= heights[stackForLeft[stackForLeft.length - 1]]
+    ) {
+      left += lefts[stackForLeft.pop()!];
+    }
+
+    stackForLeft.push(index);
+    lefts[index] = left;
+  }
+
+  const rights = new Array<number>(heights.length);
+  const stackForRight = new Array<number>();
+
+  for (let index = heights.length - 1; index >= 0; index--) {
+    const height = heights[index];
+    let right = 1;
+
+    while (
+      stackForRight.length > 0 &&
+      height <= heights[stackForRight[stackForRight.length - 1]]
+    ) {
+      right += rights[stackForRight.pop()!];
+    }
+
+    stackForRight.push(index);
+    rights[index] = right;
+  }
+
   let result = 0;
 
-  for (let index = 0; index < h.length; index++) {
-    let height = h[index];
+  for (let index = 0; index < heights.length; index++) {
+    const rectangle = heights[index] * (lefts[index] + rights[index] - 1);
 
-    while (height > 0) {
-      let width = 1;
-
-      for (const value of h.slice(0, index).reverse()) {
-        if (value < height) {
-          break;
-        }
-
-        width++;
-      }
-
-      const rectangle = height * width;
-
-      if (rectangle > result) {
-        result = rectangle;
-      }
-
-      height--;
+    if (rectangle > result) {
+      result = rectangle;
     }
   }
 
