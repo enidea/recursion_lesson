@@ -21,10 +21,7 @@ function bstSearch(
   let currentRoot = root;
 
   while (currentRoot && currentRoot.data !== key) {
-    const nextRoot =
-      currentRoot.data > key ? currentRoot.left : currentRoot.right;
-
-    currentRoot = bstSearch(nextRoot, key);
+    currentRoot = currentRoot.data > key ? currentRoot.left : currentRoot.right;
   }
 
   return currentRoot;
