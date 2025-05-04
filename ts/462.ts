@@ -14,6 +14,16 @@ class BinaryTree<E> {
   }
 }
 
+function minimumNode(root: BinaryTree<number>): BinaryTree<number> {
+  let currentNode = root;
+
+  while (currentNode?.left) {
+    currentNode = currentNode.left;
+  }
+
+  return currentNode;
+}
+
 function successor(
   root: BinaryTree<number> | null,
   key: number,
@@ -21,24 +31,21 @@ function successor(
   let current = root;
   let successor: BinaryTree<number> | null = null;
 
-  while (current && current.data !== key) {
-    if (current.data > key && (!successor || current.data < successor.data)) {
-      successor = current;
+  while (current) {
+    if (current.data === key) {
+      if (current.right) {
+        return minimumNode(current.right);
+      }
+
+      break;
     }
 
-    current = current.data > key ? current.left : current.right;
-  }
-
-  if (!current) {
-    return null;
-  }
-
-  if (current.right) {
-    successor = current.right;
-  }
-
-  while (successor?.left && successor.left.data > key) {
-    successor = successor.left;
+    if (current.data > key) {
+      successor = current;
+      current = current.left;
+    } else {
+      current = current.right;
+    }
   }
 
   return successor;
