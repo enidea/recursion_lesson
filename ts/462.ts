@@ -48,5 +48,9 @@ function successor(
     }
   }
 
+  if (!current) {
+    throw new Error('Invalid input.');
+  }
+
   return successor;
 }
