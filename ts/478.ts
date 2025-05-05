@@ -16,20 +16,18 @@ class BinaryTree<E> {
 
 function validateBST(root: BinaryTree<number> | null): boolean {
   const validate = (
-    current: BinaryTree<number> | null,
-    max = Number.MAX_SAFE_INTEGER,
-    min = Number.MIN_SAFE_INTEGER,
-  ) => {
+    node: BinaryTree<number> | null,
+    min: number,
+    max: number,
+  ): boolean => {
     return (
-      !current ||
-      (min < current.data &&
-        current.data < max &&
-        (!current.left || current.data > current.left.data) &&
-        (!current.right || current.data < current.right.data) &&
-        validate(current.left, Math.min(max, current.data), min) &&
-        validate(current.right, max, Math.max(min, current.data)))
+      !node ||
+      (min < node.data &&
+        node.data < max &&
+        validate(node.left, min, node.data) &&
+        validate(node.right, node.data, max))
     );
   };
 
-  return validate(root);
+  return validate(root, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER);
 }
