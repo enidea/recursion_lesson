@@ -15,16 +15,9 @@ class BinaryTree<E> {
 }
 
 function maximumDepth(root: BinaryTree<number> | null): number {
-  const getMaximumDepth = (root: BinaryTree<number> | null, depth = 0) => {
-    if (!(root && (root.left || root.right))) {
-      return depth;
-    }
+  if (!(root && (root.left || root.right))) {
+    return 0;
+  }
 
-    return Math.max(
-      getMaximumDepth(root.left, depth + 1),
-      getMaximumDepth(root.right, depth + 1),
-    );
-  };
-
-  return getMaximumDepth(root);
+  return Math.max(maximumDepth(root.left), maximumDepth(root.right)) + 1;
 }
