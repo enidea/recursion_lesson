@@ -15,11 +15,18 @@ class BinaryTree<E> {
 }
 
 function inorderTraversal(root: BinaryTree<number> | null): number[] {
-  return root
-    ? [
-        ...inorderTraversal(root.left),
-        root.data,
-        ...inorderTraversal(root.right),
-      ]
-    : [];
+  const result: number[] = [];
+
+  const traversal = (node: BinaryTree<number> | null) => {
+    if (!node) {
+      return;
+    }
+
+    traversal(node.left);
+    result.push(node.data);
+    traversal(node.right);
+  };
+
+  traversal(root);
+  return result;
 }

@@ -15,13 +15,19 @@ class BinaryTree<E> {
 }
 
 function preorderTraversal(root: BinaryTree<number> | null): number[] {
-  if (!root) {
-    return [];
-  }
+  const result: number[] = [];
 
-  return [
-    root.data,
-    ...preorderTraversal(root.left),
-    ...preorderTraversal(root.right),
-  ];
+  const traversal = (node: BinaryTree<number> | null) => {
+    if (!node) {
+      return;
+    }
+
+    result.push(node.data);
+    traversal(node.left);
+    traversal(node.right);
+  };
+
+  traversal(root);
+
+  return result;
 }
