@@ -26,9 +26,9 @@ function bstInsert(
 
   let current: BinaryTree<number> | null = root;
 
-  while (current) {
+  while (true) {
     if (current.data === key) {
-      break;
+      return root;
     }
 
     if (current.data > key) {
