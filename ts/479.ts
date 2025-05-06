@@ -60,7 +60,7 @@ function symmetricTree(root: BinaryTree<number> | null): boolean {
   let leftNodeList: BinaryTreeList = [root.left];
   let rightNodeList: BinaryTreeList = [root.right];
 
-  while (leftNodeList.length > 0) {
+  while (leftNodeList.length > 0 && rightNodeList.length > 0) {
     if (
       !areArraysEqual(
         getNodeDataList(leftNodeList),
