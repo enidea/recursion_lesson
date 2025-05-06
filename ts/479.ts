@@ -14,28 +14,56 @@ class BinaryTree<E> {
   }
 }
 
+// Iterative solution
 function symmetricTree(root: BinaryTree<number> | null): boolean {
   if (!root) {
     return true;
   }
 
-  const symmetricTreeHelper = (
-    left: BinaryTree<number> | null,
-    right: BinaryTree<number> | null,
-  ): boolean => {
+  const queue: (BinaryTree<number> | null)[] = [root.left, root.right];
+
+  while (queue.length > 0) {
+    const left = queue.shift();
+    const right = queue.shift();
+
     if (!(left || right)) {
-      return true;
+      continue;
     }
 
     if (!(left && right) || left.data !== right.data) {
       return false;
     }
 
-    return (
-      symmetricTreeHelper(left.left, right.right) &&
-      symmetricTreeHelper(left.right, right.left)
-    );
-  };
+    queue.push(left.left, right.right);
+    queue.push(left.right, right.left);
+  }
 
-  return symmetricTreeHelper(root.left, root.right);
+  return true;
 }
+
+// Recursive solution
+// function symmetricTree(root: BinaryTree<number> | null): boolean {
+//   if (!root) {
+//     return true;
+//   }
+
+//   const symmetricTreeHelper = (
+//     left: BinaryTree<number> | null,
+//     right: BinaryTree<number> | null,
+//   ): boolean => {
+//     if (!(left || right)) {
+//       return true;
+//     }
+
+//     if (!(left && right) || left.data !== right.data) {
+//       return false;
+//     }
+
+//     return (
+//       symmetricTreeHelper(left.left, right.right) &&
+//       symmetricTreeHelper(left.right, right.left)
+//     );
+//   };
+
+//   return symmetricTreeHelper(root.left, root.right);
+// }
