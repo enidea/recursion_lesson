@@ -18,24 +18,21 @@ function levelOrderTraversal(
   root: BinaryTree<number> | null,
 ): (number | null)[] {
   const result: (number | null)[] = [];
-  let currentLine = [root];
+  const queue = [root];
 
-  while (currentLine.length > 0) {
-    const nextLine: (BinaryTree<number> | null)[] = [];
+  while (queue.length > 0) {
+    const current = queue.shift();
 
-    for (const node of currentLine) {
-      if (node) {
-        result.push(node.data);
-        nextLine.push(node.left, node.right);
-      } else {
-        result.push(null);
-      }
+    if (!current) {
+      result.push(null);
+      continue;
     }
 
-    currentLine = nextLine;
+    result.push(current.data);
+    queue.push(current.left, current.right);
   }
 
-  while (result[result.length - 1] === null) {
+  while (result.length > 0 && result[result.length - 1] === null) {
     result.pop();
   }
 
