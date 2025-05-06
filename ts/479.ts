@@ -14,65 +14,28 @@ class BinaryTree<E> {
   }
 }
 
-const areArraysEqual = (
-  a: readonly unknown[],
-  b: readonly unknown[],
-): boolean => {
-  if (a.length !== b.length) {
-    return false;
-  }
-
-  for (let index = 0; index < a.length; index++) {
-    if (a[index] !== b[index]) {
-      return false;
-    }
-  }
-
-  return true;
-};
-
 function symmetricTree(root: BinaryTree<number> | null): boolean {
-  type BinaryTreeList = (BinaryTree<number> | null)[];
-
-  const getNodeDataList = (nodeList: BinaryTreeList): (number | null)[] => {
-    return nodeList.map((node) => {
-      return node ? node.data : null;
-    });
-  };
-
-  const getChildrenNodeList = (nodeList: BinaryTreeList): BinaryTreeList => {
-    const result: BinaryTreeList = [];
-
-    for (const node of nodeList) {
-      if (node) {
-        result.push(node.left);
-        result.push(node.right);
-      }
-    }
-
-    return result;
-  };
-
   if (!root) {
     return true;
   }
 
-  let leftNodeList: BinaryTreeList = [root.left];
-  let rightNodeList: BinaryTreeList = [root.right];
+  const symmetricTreeHelper = (
+    left: BinaryTree<number> | null,
+    right: BinaryTree<number> | null,
+  ): boolean => {
+    if (!(left || right)) {
+      return true;
+    }
 
-  while (leftNodeList.length > 0 && rightNodeList.length > 0) {
-    if (
-      !areArraysEqual(
-        getNodeDataList(leftNodeList),
-        getNodeDataList(rightNodeList).reverse(),
-      )
-    ) {
+    if (!(left && right) || left.data !== right.data) {
       return false;
     }
 
-    leftNodeList = getChildrenNodeList(leftNodeList);
-    rightNodeList = getChildrenNodeList(rightNodeList);
-  }
+    return (
+      symmetricTreeHelper(left.left, right.right) &&
+      symmetricTreeHelper(left.right, right.left)
+    );
+  };
 
-  return true;
+  return symmetricTreeHelper(root.left, root.right);
 }
