@@ -43,16 +43,18 @@ function bstDelete(
         }
 
         if (current.right.data === successorNode.data) {
+          successorNode.left = current.left;
           nodeToBePorted = successorNode;
         } else {
-          const successorParentNode = predecessor(current, successorNode.data);
+          const successorParentNode = getParent(root, successorNode);
 
           if (!successorParentNode) {
             throw new Error('Invalid inputs');
           }
 
           successorParentNode.left = successorNode.right;
-          successorNode.right = successorParentNode;
+          successorNode.left = current.left;
+          successorNode.right = current.right;
           nodeToBePorted = successorNode;
         }
       }
@@ -112,43 +114,26 @@ function successor(
   return successor;
 }
 
-function maximumNode(root: BinaryTree<number>): BinaryTree<number> {
-  let currentRoot = root;
-
-  while (currentRoot?.right) {
-    currentRoot = currentRoot.right;
+function getParent(
+  root: BinaryTree<number>,
+  child: BinaryTree<number>,
+): BinaryTree<number> {
+  if (root.data === child.data) {
+    return root;
   }
 
-  return currentRoot;
-}
-
-function predecessor(
-  root: BinaryTree<number> | null,
-  key: number,
-): BinaryTree<number> | null {
-  let current = root;
-  let predecessor: BinaryTree<number> | null = null;
+  let current: BinaryTree<number> | null = root;
 
   while (current) {
-    if (current.data === key) {
-      if (current.left) {
-        return maximumNode(current.left);
-      }
-
-      break;
+    if (
+      current.left?.data === child.data ||
+      current.right?.data === child.data
+    ) {
+      return current;
     }
 
-    if (current.data > key) {
-      current = current.left;
-    } else {
-      predecessor = current;
-      current = current.right;
-    }
+    current = current.data > child.data ? current.left : current.right;
   }
 
-  if (!current) {
-    throw new Error('Invalid input.');
-  }
-
-  return predecessor;
+  throw new Error('Invalid inputs.');
 }
