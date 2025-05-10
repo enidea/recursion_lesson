@@ -69,11 +69,8 @@ function bstDelete(
     return nodeToBePorted;
   }
 
-  if (parent.left?.data === current.data) {
-    parent.left = nodeToBePorted;
-  } else {
-    parent.right = nodeToBePorted;
-  }
+  parent[parent.left?.data === current.data ? 'left' : 'right'] =
+    nodeToBePorted;
 
   return root;
 }
