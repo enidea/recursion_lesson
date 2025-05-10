@@ -38,32 +38,31 @@ function bstDelete(
 
   if (!(current.left || current.right)) {
     nodeToBePorted = null;
-  } else if (current.left && !current.right) {
-    nodeToBePorted = current.left;
-  } else if (!current.left && current.right) {
-    nodeToBePorted = current.right;
   } else if (current.left && current.right) {
-    const successorNode = successor(current, current.data);
+    const { successorParent, successor } = successorWithSuccessorParent(
+      current,
+      current.data,
+    );
 
-    if (!successorNode) {
+    if (!successor) {
       throw new Error('Invalid inputs');
     }
 
-    if (current.right.data === successorNode.data) {
-      successorNode.left = current.left;
-      nodeToBePorted = successorNode;
+    if (current.right.data === successor.data) {
+      successor.left = current.left;
+      nodeToBePorted = successor;
     } else {
-      const successorParentNode = getParent(root, successorNode);
-
-      if (!successorParentNode) {
+      if (!successorParent) {
         throw new Error('Invalid inputs');
       }
 
-      successorParentNode.left = successorNode.right;
-      successorNode.left = current.left;
-      successorNode.right = current.right;
-      nodeToBePorted = successorNode;
+      successorParent.left = successor.right;
+      successor.left = current.left;
+      successor.right = current.right;
+      nodeToBePorted = successor;
     }
+  } else {
+    nodeToBePorted = current[current.left ? 'left' : 'right'];
   }
 
   if (parent === null) {
@@ -79,63 +78,44 @@ function bstDelete(
   return root;
 }
 
-function minimumNode(root: BinaryTree<number>): BinaryTree<number> {
-  let currentNode = root;
-
-  while (currentNode?.left) {
-    currentNode = currentNode.left;
-  }
-
-  return currentNode;
-}
-
-function successor(
+function successorWithSuccessorParent(
   root: BinaryTree<number> | null,
   key: number,
-): BinaryTree<number> | null {
+): {
+  successorParent: BinaryTree<number> | null;
+  successor: BinaryTree<number> | null;
+} {
+  let parent: BinaryTree<number> | null = null;
   let current = root;
+  let successorParent: BinaryTree<number> | null = null;
   let successor: BinaryTree<number> | null = null;
 
   while (current) {
     if (current.data === key) {
       if (current.right) {
-        return minimumNode(current.right);
+        successorParent = parent;
+        successor = current.right;
+
+        while (successor?.left) {
+          successorParent = successor;
+          successor = successor.left;
+        }
       }
 
       break;
     }
 
     if (current.data > key) {
-      successor = current;
+      successorParent = parent;
+      parent = successor = current;
       current = current.left;
     } else {
       current = current.right;
     }
   }
 
-  return successor;
-}
-
-function getParent(
-  root: BinaryTree<number>,
-  child: BinaryTree<number>,
-): BinaryTree<number> {
-  if (root.data === child.data) {
-    return root;
-  }
-
-  let current: BinaryTree<number> | null = root;
-
-  while (current) {
-    if (
-      current.left?.data === child.data ||
-      current.right?.data === child.data
-    ) {
-      return current;
-    }
-
-    current = current.data > child.data ? current.left : current.right;
-  }
-
-  throw new Error('Invalid inputs.');
+  return {
+    successorParent,
+    successor,
+  };
 }
