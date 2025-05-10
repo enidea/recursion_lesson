@@ -25,53 +25,55 @@ function bstDelete(
   let parent: BinaryTree<number> | null = null;
   let current: BinaryTree<number> | null = root;
 
-  while (current) {
-    if (current?.data === key) {
-      let nodeToBePorted: BinaryTree<number> | null = null;
-
-      if (!(current.left || current.right)) {
-        nodeToBePorted = null;
-      } else if (current.left && !current.right) {
-        nodeToBePorted = current.left;
-      } else if (!current.left && current.right) {
-        nodeToBePorted = current.right;
-      } else if (current.left && current.right) {
-        const successorNode = successor(current, current.data);
-
-        if (!successorNode) {
-          throw new Error('Invalid inputs');
-        }
-
-        if (current.right.data === successorNode.data) {
-          successorNode.left = current.left;
-          nodeToBePorted = successorNode;
-        } else {
-          const successorParentNode = getParent(root, successorNode);
-
-          if (!successorParentNode) {
-            throw new Error('Invalid inputs');
-          }
-
-          successorParentNode.left = successorNode.right;
-          successorNode.left = current.left;
-          successorNode.right = current.right;
-          nodeToBePorted = successorNode;
-        }
-      }
-
-      if (parent === null) {
-        return nodeToBePorted;
-      }
-
-      if (parent.left?.data === current.data) {
-        parent.left = nodeToBePorted;
-      } else {
-        parent.right = nodeToBePorted;
-      }
-    }
-
+  while (current && current.data !== key) {
     parent = current;
     current = current.data > key ? current.left : current.right;
+  }
+
+  if (!current) {
+    return root;
+  }
+
+  let nodeToBePorted: BinaryTree<number> | null = null;
+
+  if (!(current.left || current.right)) {
+    nodeToBePorted = null;
+  } else if (current.left && !current.right) {
+    nodeToBePorted = current.left;
+  } else if (!current.left && current.right) {
+    nodeToBePorted = current.right;
+  } else if (current.left && current.right) {
+    const successorNode = successor(current, current.data);
+
+    if (!successorNode) {
+      throw new Error('Invalid inputs');
+    }
+
+    if (current.right.data === successorNode.data) {
+      successorNode.left = current.left;
+      nodeToBePorted = successorNode;
+    } else {
+      const successorParentNode = getParent(root, successorNode);
+
+      if (!successorParentNode) {
+        throw new Error('Invalid inputs');
+      }
+
+      successorParentNode.left = successorNode.right;
+      successorNode.left = current.left;
+      successorNode.right = current.right;
+      nodeToBePorted = successorNode;
+    }
+  }
+
+  if (parent === null) {
+    return nodeToBePorted;
+  }
+
+  if (parent.left?.data === current.data) {
+    parent.left = nodeToBePorted;
+  } else {
+    parent.right = nodeToBePorted;
   }
 
   return root;
