@@ -102,13 +102,8 @@ function successorWithSuccessorParent(
       break;
     }
 
-    if (current.data > key) {
-      successorParent = parent;
-      parent = successor = current;
-      current = current.left;
-    } else {
-      current = current.right;
-    }
+    parent = current;
+    current = current[current.data > key ? 'left' : 'right'];
   }
 
   return {
