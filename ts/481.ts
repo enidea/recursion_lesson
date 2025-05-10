@@ -34,22 +34,20 @@ function bstDelete(
     return root;
   }
 
+  const toDelete = current;
+
   let nodeToBePorted: BinaryTree<number> | null = null;
 
-  if (!(current.left || current.right)) {
-    nodeToBePorted = null;
-  } else if (current.left && current.right) {
-    const { successorParent, successor } = successorWithSuccessorParent(
-      current,
-      current.data,
-    );
+  if (toDelete.left && toDelete.right) {
+    const { successorParent, successor } =
+      successorWithSuccessorParent(toDelete);
 
     if (!successor) {
       throw new Error('Invalid inputs');
     }
 
-    if (current.right.data === successor.data) {
-      successor.left = current.left;
+    if (toDelete.right.data === successor.data) {
+      successor.left = toDelete.left;
       nodeToBePorted = successor;
     } else {
       if (!successorParent) {
@@ -57,53 +55,38 @@ function bstDelete(
       }
 
       successorParent.left = successor.right;
-      successor.left = current.left;
-      successor.right = current.right;
+      successor.left = toDelete.left;
+      successor.right = toDelete.right;
       nodeToBePorted = successor;
     }
   } else {
-    nodeToBePorted = current[current.left ? 'left' : 'right'];
+    nodeToBePorted = toDelete[toDelete.left ? 'left' : 'right'];
   }
 
-  if (parent === null) {
+  if (!parent) {
     return nodeToBePorted;
   }
 
-  parent[parent.left?.data === current.data ? 'left' : 'right'] =
+  parent[parent.left?.data === toDelete.data ? 'left' : 'right'] =
     nodeToBePorted;
 
   return root;
 }
 
-function successorWithSuccessorParent(
-  root: BinaryTree<number> | null,
-  key: number,
-): {
+function successorWithSuccessorParent(current: BinaryTree<number> | null): {
   successorParent: BinaryTree<number> | null;
   successor: BinaryTree<number> | null;
 } {
-  let parent: BinaryTree<number> | null = null;
-  let current = root;
   let successorParent: BinaryTree<number> | null = null;
   let successor: BinaryTree<number> | null = null;
 
-  while (current) {
-    if (current.data === key) {
-      if (current.right) {
-        successorParent = parent;
-        successor = current.right;
+  if (current?.right) {
+    successor = current.right;
 
-        while (successor?.left) {
-          successorParent = successor;
-          successor = successor.left;
-        }
-      }
-
-      break;
+    while (successor?.left) {
+      successorParent = successor;
+      successor = successor.left;
     }
-
-    parent = current;
-    current = current[current.data > key ? 'left' : 'right'];
   }
 
   return {
