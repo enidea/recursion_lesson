@@ -12,27 +12,27 @@ const maxHeapify = (intArr: number[], index: number, targetLength: number) => {
   let currentIndex = index;
 
   while (true) {
-    let currentMinValueIndex = currentIndex;
+    let currentMaxValueIndex = currentIndex;
 
     const compare = (comparisonIndex: number) => {
       if (
         comparisonIndex < targetLength &&
-        intArr[comparisonIndex] > intArr[currentMinValueIndex]
+        intArr[comparisonIndex] > intArr[currentMaxValueIndex]
       ) {
-        currentMinValueIndex = comparisonIndex;
+        currentMaxValueIndex = comparisonIndex;
       }
     };
 
     compare(currentIndex * 2 + 1);
     compare(currentIndex * 2 + 2);
 
-    if (currentIndex === currentMinValueIndex) {
+    if (currentIndex === currentMaxValueIndex) {
       return;
     }
 
-    swap(intArr, currentIndex, currentMinValueIndex);
+    swap(intArr, currentIndex, currentMaxValueIndex);
 
-    currentIndex = currentMinValueIndex;
+    currentIndex = currentMaxValueIndex;
   }
 };
 
