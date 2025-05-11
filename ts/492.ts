@@ -8,8 +8,7 @@ const swap = <T>(arr: T[], indexA: number, indexB: number) => {
   arr[indexB] = a;
 };
 
-const minHeapify = (intArr: number[], index: number) => {
-  const length = intArr.length;
+const minHeapify = (intArr: number[], index: number, targetLength: number) => {
   let currentIndex = index;
 
   while (true) {
@@ -17,7 +16,7 @@ const minHeapify = (intArr: number[], index: number) => {
 
     const compare = (comparisonIndex: number) => {
       if (
-        comparisonIndex < length &&
+        comparisonIndex < targetLength &&
         intArr[comparisonIndex] < intArr[currentMinValueIndex]
       ) {
         currentMinValueIndex = comparisonIndex;
@@ -37,30 +36,26 @@ const minHeapify = (intArr: number[], index: number) => {
   }
 };
 
-function buildMinHeap(intArr: number[]): number[] {
-  const lastParentIndex = Math.floor((intArr.length - 1) / 2);
+function buildMinHeap(intArr: number[]) {
+  const length = intArr.length;
+  const lastParentIndex = Math.floor((length - 1) / 2);
 
   for (let index = lastParentIndex; index >= 0; index--) {
-    minHeapify(intArr, index);
+    minHeapify(intArr, index, length);
   }
-
-  return intArr;
 }
 
 function heapsort(intArr: number[]): number[] {
-  const minHeap = buildMinHeap(intArr);
-  const result = new Array<number>();
+  buildMinHeap(intArr);
+  let unsortedLength = intArr.length;
 
-  while (minHeap.length > 0) {
-    minHeapify(minHeap, 0);
-    swap(minHeap, 0, minHeap.length - 1);
-    const minValue = minHeap.pop();
-    if (minValue === undefined) {
-      break;
-    }
-
-    result.push(minValue);
+  while (unsortedLength > 0) {
+    unsortedLength--;
+    swap(intArr, 0, unsortedLength);
+    minHeapify(intArr, 0, unsortedLength);
   }
 
-  return result;
+  intArr.reverse();
+
+  return intArr;
 }
