@@ -1,4 +1,4 @@
-const swap = (arr: unknown[], indexA: number, indexB: number) => {
+const swap = <T>(arr: T[], indexA: number, indexB: number) => {
   if (indexA === indexB) {
     return;
   }
@@ -9,6 +9,7 @@ const swap = (arr: unknown[], indexA: number, indexB: number) => {
 };
 
 const maxHeapify = (intArr: number[], index: number) => {
+  const length = intArr.length;
   let currentIndex = index;
 
   while (true) {
@@ -16,7 +17,7 @@ const maxHeapify = (intArr: number[], index: number) => {
 
     const compare = (comparisonIndex: number) => {
       if (
-        intArr[comparisonIndex] &&
+        comparisonIndex < length &&
         intArr[comparisonIndex] > intArr[maxValueIndex]
       ) {
         maxValueIndex = comparisonIndex;
@@ -37,18 +38,10 @@ const maxHeapify = (intArr: number[], index: number) => {
 };
 
 function buildMaxHeap(intArr: number[]): number[] {
-  const length = intArr.length;
-  let depth = Math.floor(Math.log2(length)) - 1;
+  const lastParentIndex = Math.floor((intArr.length - 1) / 2);
 
-  while (depth >= 0) {
-    for (
-      let index = 2 ** depth;
-      index < Math.min(length, 2 ** (depth + 1));
-      index++
-    ) {
-      maxHeapify(intArr, index - 1);
-    }
-    depth--;
+  for (let index = lastParentIndex; index >= 0; index--) {
+    maxHeapify(intArr, index);
   }
 
   return intArr;
