@@ -50,8 +50,8 @@ function heapsort(intArr: number[]): number[] {
   let unsortedLength = intArr.length;
 
   while (unsortedLength > 0) {
+    swap(intArr, 0, unsortedLength - 1);
     unsortedLength--;
-    swap(intArr, 0, unsortedLength);
     minHeapify(intArr, 0, unsortedLength);
   }
 
