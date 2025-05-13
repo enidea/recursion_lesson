@@ -18,17 +18,10 @@ const maxByCriteria = (
 
 const compareLength = (s1: string, s2: string) => s1.length >= s2.length;
 
-const getTotalAsciiCode = (s: string): number => {
-  let total = 0;
-
-  for (const char of s) {
-    total += char.charCodeAt(0);
-  }
-
-  return total;
-};
+const calculateAsciiSum = (s: string): number =>
+  s.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
 const compareAsciiTotal = (s1: string, s2: string) =>
-  getTotalAsciiCode(s1) >= getTotalAsciiCode(s2);
+  calculateAsciiSum(s1) >= calculateAsciiSum(s2);
 
 const testData: [StringComparator, NotEmptyReadonlyArray<string>][] = [
   [compareLength, ['apple', 'yumberry', 'grape', 'banana', 'mandarin']],
