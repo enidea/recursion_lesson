@@ -21,7 +21,7 @@ class Queue {
     }
   };
   dequeue = () => {
-    if (!this.head?.next) {
+    if (!this.head) {
       return null;
     }
 
