@@ -1,17 +1,17 @@
+type Task = () => void;
+
 class Item {
   constructor(
-    public data: CallableFunction,
+    public data: Task,
     public next: Item | null = null,
   ) {}
 }
 
 class Queue {
-  constructor(
-    public head: Item | null = null,
-    public tail: Item | null = null,
-  ) {}
+  private head: Item | null = null;
+  private tail: Item | null = null;
 
-  peakFront = () => this.head?.data;
+  peekFront = () => this.head?.data;
   enqueue = (item: Item) => {
     if (this.head && this.tail) {
       this.tail.next = item;
@@ -40,16 +40,14 @@ class Queue {
 class TaskQueue {
   constructor(public queue: Queue = new Queue()) {}
 
-  push = (task: CallableFunction) => this.queue.enqueue(new Item(task));
-  taskExists = () => this.queue.peakFront() !== undefined;
+  push = (task: Task) => this.queue.enqueue(new Item(task));
+  taskExists = () => this.queue.peekFront() !== undefined;
   run = () => {
     const task = this.queue.dequeue();
 
-    if (task === null) {
-      return;
+    if (task) {
+      task();
     }
-
-    task();
   };
 }
 
